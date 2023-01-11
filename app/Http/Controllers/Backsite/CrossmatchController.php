@@ -35,7 +35,7 @@ class CrossmatchController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.crossmatch.index');
+        return view('pages.backsite.operational.crossmatch.index');
     }
 
     /**

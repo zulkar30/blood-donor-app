@@ -35,7 +35,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.role.index');
+        return view('pages.backsite.management-access.role.index');
     }
 
     /**

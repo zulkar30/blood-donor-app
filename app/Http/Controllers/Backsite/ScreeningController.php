@@ -35,7 +35,7 @@ class ScreeningController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.screening.index');
+        return view('pages.backsite.operational.screening.index');
     }
 
     /**

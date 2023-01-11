@@ -35,7 +35,7 @@ class BloodRequestController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.blood-request.index');
+        return view('pages.backsite.operational.blood-request.index');
     }
 
     /**

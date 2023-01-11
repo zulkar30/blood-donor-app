@@ -35,7 +35,7 @@ class AftapController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.aftap.index');
+        return view('pages.backsite.operational.aftap.index');
     }
 
     /**

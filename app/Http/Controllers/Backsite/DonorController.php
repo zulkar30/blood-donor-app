@@ -35,7 +35,7 @@ class DonorController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.donor.index');
+        return view('pages.backsite.master-data.donor.index');
     }
 
     /**

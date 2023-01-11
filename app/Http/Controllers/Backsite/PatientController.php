@@ -35,7 +35,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.patient.index');
+        return view('pages.backsite.master-data.patient.index');
     }
 
     /**

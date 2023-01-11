@@ -35,7 +35,7 @@ class TypeUserController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.type-user.index');
+        return view('pages.backsite.management-access.type-user.index');
     }
 
     /**
