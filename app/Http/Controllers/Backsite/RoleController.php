@@ -11,12 +11,18 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 // Request
+use App\Http\Requests\Role\StoreRoleRequest;
+use App\Http\Requests\Role\UpdateRoleRequest;
 
 // Everything Else
 use Auth;
-// use Gate;
+use Gate;
 
 // Model
+use App\Models\ManagementAccess\Role;
+use App\Models\ManagementAccess\RoleUser;
+use App\Models\ManagementAccess\Permission;
+use App\Models\ManagementAccess\PermissionRole;
 
 // Third Party
 
@@ -35,7 +41,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.management-access.role.index');
+        abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $role = Role::orderBy('created_at', 'desc')->get();
+
+        return view('pages.backsite.management-access.role.index', compact('role'));
     }
 
     /**
@@ -54,9 +64,18 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        return abort(404);
+        // Ambil semua data dari frontsite
+        $data = $request->all();
+
+        // Kirim data ke database
+        $role = Role::create($data);
+
+        // Sweetalert
+        alert()->success('Success Create Message', 'Successfully added new Role');
+        // Tempat akan ditampilkannya Sweetalert
+        return redirect()->route('backsite.role.index');
     }
 
     /**
@@ -65,9 +84,13 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Role $role)
     {
-        return abort(404);
+        abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $role->load('permission');
+
+        return view('pages.backsite.management-access.role.show', compact('role'));
     }
 
     /**
@@ -76,9 +99,14 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        return abort(404);
+        abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $permission = Permission::all();
+        $role->load('permission');
+
+        return view('pages.backsite.management-access.role.edit', compact('permission', 'role'));
     }
 
     /**
@@ -88,9 +116,19 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        return abort(404);
+        // Ambil semua data dari frontsite
+        $data = $request->all();
+
+        // Update data ke database
+        $role->update($data);
+        $role->permission()->sync($request->input('permission', []));
+
+        // Sweetalert
+        alert()->success('Success Update Message', 'Successfully updated Role');
+        // Tempat akan ditampilkannya Sweetalert
+        return redirect()->route('backsite.role.index');
     }
 
     /**
@@ -99,8 +137,16 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        return abort(404);
+        abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        // Menghapus data berdasarkan id
+        $role->delete();
+
+        // Sweetalert
+        alert()->success('Success Delete Message', 'Successfully deleted Role');
+        // Tempat akan ditampilkannya Sweetalert
+        return back();
     }
 }

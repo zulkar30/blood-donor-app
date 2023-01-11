@@ -11,12 +11,15 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 // Request
+use App\Http\Requests\BloodSupply\StoreBloodSupplyRequest;
+use App\Http\Requests\BloodSupply\UpdateBloodSupplyRequest;
 
 // Everything Else
 use Auth;
-// use Gate;
+use Gate;
 
 // Model
+use App\Models\MasterData\BloodSupply;
 
 // Third Party
 

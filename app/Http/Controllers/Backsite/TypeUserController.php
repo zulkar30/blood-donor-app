@@ -14,9 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 // Everything Else
 use Auth;
-// use Gate;
+use Gate;
 
 // Model
+use App\Models\ManagementAccess\TypeUser;
 
 // Third Party
 
@@ -35,7 +36,12 @@ class TypeUserController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.management-access.type-user.index');
+        // Middleware Gate
+        abort_if(Gate::denies('type_user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $type_user = TypeUser::all();
+
+        return view('pages.backsite.management-access.type-user.index', compact('type_user'));
     }
 
     /**
