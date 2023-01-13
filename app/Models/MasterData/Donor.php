@@ -18,7 +18,6 @@ class Donor extends Model
 
     // Kolom tabel yang boleh diisi
     protected $fillable = [
-        'user_id',
         'name',
         'birth_place',
         'birth_date',
@@ -31,12 +30,6 @@ class Donor extends Model
         'created_at',
         'updated_at',
     ];
-    
-    // Relasi one to one
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User', 'user_id', 'id');
-    }
 
     // Relasi one to many
     public function aftap()

@@ -38,7 +38,12 @@ class BloodSupplyController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.master-data.blood-supply.index');
+        // Middleware Gate
+        abort_if(Gate::denies('blood_supply_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $blood_supply = BloodSupply::all();
+
+        return view('pages.backsite.master-data.blood-supply.index', compact('blood_supply'));
     }
 
     /**
@@ -57,9 +62,18 @@ class BloodSupplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBloodSupplyRequest $request)
     {
-        return abort(404);
+        // Ambil semua data dari frontsite
+        $data = $request->all();
+
+        // Kirim data ke database
+        $blood_supply = BloodSupply::create($data);
+
+        // Sweetalert
+        alert()->success('Success Create Message', 'Successfully added new Blood Supply');
+        // Tempat akan ditampilkannya Sweetalert
+        return redirect()->route('backsite.blood_supply.index');
     }
 
     /**
@@ -68,9 +82,11 @@ class BloodSupplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(BloodSupply $blood_supply)
     {
-        return abort(404);
+        abort_if(Gate::denies('blood_supply_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return view('pages.backsite.master-data.blood-supply.show', compact('blood_supply'));
     }
 
     /**
@@ -79,9 +95,11 @@ class BloodSupplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(BloodSupply $blood_supply)
     {
-        return abort(404);
+        abort_if(Gate::denies('blood_supply_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return view('pages.backsite.master-data.blood-supply.edit', compact('blood_supply'));
     }
 
     /**
@@ -91,9 +109,18 @@ class BloodSupplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateBloodSupplyRequest $request, BloodSupply $blood_supply)
     {
-        return abort(404);
+        // Ambil semua data dari frontsite
+        $data = $request->all();
+
+        // Update data ke database
+        $blood_supply->update($data);
+
+        // Sweetalert
+        alert()->success('Success Update Message', 'Successfully updated Blood Supply');
+        // Tempat akan ditampilkannya Sweetalert
+        return redirect()->route('backsite.blood_supply.index');
     }
 
     /**
@@ -102,8 +129,16 @@ class BloodSupplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(BloodSupply $blood_supply)
     {
-        return abort(404);
+        abort_if(Gate::denies('blood_supply_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        // Menghapus data berdasarkan id
+        $blood_supply->delete();
+
+        // Sweetalert
+        alert()->success('Success Delete Message', 'Successfully deleted Blood Supply');
+        // Tempat akan ditampilkannya Sweetalert
+        return back();
     }
 }

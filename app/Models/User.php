@@ -93,20 +93,8 @@ class User extends Authenticatable
     }
 
     // Relasi one to one
-    public function donor()
-    {
-        return $this->hasOne('App\Models\Operational\Donor', 'user_id');
-    }
-
-    // Relasi one to one
     public function officer()
     {
         return $this->hasOne('App\Models\Operational\Officer', 'user_id');
-    }
-
-    // Relasi one to one
-    public function patient()
-    {
-        return $this->hasOne('App\Models\Operational\Patient', 'user_id');
     }
 }
