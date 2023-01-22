@@ -31,7 +31,7 @@ use App\Http\Controllers\Backsite\BloodRequestController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 // Backsite Page Start

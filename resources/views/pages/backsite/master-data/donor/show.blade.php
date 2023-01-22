@@ -5,7 +5,11 @@
     </tr>
     <tr>
         <th>Gender</th>
-        <td>{{ isset($donor->gender) ? $donor->gender : 'N/A' }}</td>
+        <td>@if ($donor->gender == '1')
+            <span>Laki - laki</span>
+        @else
+            <span>Perempuan</span>
+        @endif</td>
     </tr>
     <tr>
         <th>Blood Type</th>
@@ -13,6 +17,6 @@
     </tr>
     <tr>
         <th>Age</th>
-        <td>{{ isset($donor->age) ? $donor->age : 'N/A' }}</td>
+        <td>{{ isset($donor->age) ? $donor->age . ' Tahun' : 'N/A' }}</td>
     </tr>
 </table>

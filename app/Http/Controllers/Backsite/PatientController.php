@@ -11,12 +11,15 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 // Request
+use App\Http\Requests\Patient\StorePatientRequest;
+use App\Http\Requests\Patient\UpdatePatientRequest;
 
 // Everything Else
 use Auth;
-// use Gate;
+use Gate;
 
 // Model
+use App\Models\MasterData\Patient;
 
 // Third Party
 
@@ -35,7 +38,12 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.master-data.patient.index');
+        abort_if(Gate::denies('patient_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        // Ditampilkan pada tabel
+        $patient = Patient::orderBy('created_at', 'desc')->get();
+
+        return view('pages.backsite.master-data.patient.index', compact('patient'));
     }
 
     /**
@@ -54,9 +62,20 @@ class PatientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePatientRequest $request)
     {
-        return abort(404);
+        // Ambil semua data dari frontsite
+        $data = $request->all();
+
+        $data['age'] = str_replace(' Tahun', '', $data['age']);
+
+        // Kirim data ke database
+        $patient = Patient::create($data);
+
+        // Sweetalert
+        alert()->success('Success Create Message', 'Successfully added new Patient');
+        // Tempat akan ditampilkannya Sweetalert
+        return redirect()->route('backsite.patient.index');
     }
 
     /**
@@ -65,9 +84,11 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Patient $patient)
     {
-        return abort(404);
+        abort_if(Gate::denies('patient_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return view('pages.backsite.master-data.patient.show', compact('patient'));
     }
 
     /**
@@ -76,9 +97,11 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Patient $patient)
     {
-        return abort(404);
+        abort_if(Gate::denies('patient_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return view('pages.backsite.master-data.patient.edit', compact('patient'));
     }
 
     /**
@@ -88,9 +111,20 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePatientRequest $request, Patient $patient)
     {
-        return abort(404);
+        // Ambil semua data dari frontsite
+        $data = $request->all();
+
+        $data['age'] = str_replace(' Tahun', '', $data['age']);
+
+        // Update data ke database
+        $patient->update($data);
+
+        // Sweetalert
+        alert()->success('Success Update Message', 'Successfully updated Patient');
+        // Tempat akan ditampilkannya Sweetalert
+        return redirect()->route('backsite.patient.index');
     }
 
     /**
@@ -99,8 +133,15 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Patient $patient)
     {
-        return abort(404);
+        abort_if(Gate::denies('patient_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $patient->delete();
+
+        // Sweetalert
+        alert()->success('Success Delete Message', 'Successfully deleted Patient');
+        // Tempat akan ditampilkannya Sweetalert
+        return back();
     }
 }

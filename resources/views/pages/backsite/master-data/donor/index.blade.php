@@ -217,8 +217,15 @@
                                                                 <td>{{ isset($donor_item->created_at) ? date('d/m/Y H:i:s', strtotime($donor_item->created_at)) : '' }}
                                                                 </td>
                                                                 <td>{{ $donor_item->name ?? '' }}</td>
-                                                                <td>{{ $donor_item->gender ?? '' }}</td>
-                                                                <td>{{ $donor_item->age ?? '' }}</td>
+                                                                <td>
+                                                                    @if ($donor_item->gender == 1)
+                                                                        <span>Laki - laki</span>
+                                                                    @else
+                                                                        <span>Perempuan</span>
+                                                                    @endif
+                                                                </td>
+                                                                {{-- <td>{{ $donor_item->gender ?? '' }}</td> --}}
+                                                                <td>{{ $donor_item->age . ' Tahun' ?? '' }}</td>
                                                                 <td>{{ $donor_item->blood_type ?? '' }}</td>
                                                                 <td class="text-center">
 

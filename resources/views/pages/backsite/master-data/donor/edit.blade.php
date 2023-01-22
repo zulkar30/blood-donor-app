@@ -99,8 +99,7 @@
                                                             required>
                                                             <option
                                                                 value="{{ old('gender', isset($donor) ? $donor->gender : '') }}"
-                                                                disabled selected>Choose
-                                                                Gender
+                                                                disabled selected> Choose Gender
                                                             </option>
                                                             <option value="1">Laki -laki</option>
                                                             <option value="2">Perempuan</option>
